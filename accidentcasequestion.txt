@@ -1,0 +1,352 @@
+ create table PERSON(
+  2  driverid varchar(30),
+  3  name varchar(50),
+  4  address varchar(100),
+  5  primary key(driverid));
+
+Table created.
+
+desc PERSON
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DRIVERID                                  NOT NULL VARCHAR2(30)
+ NAME                                               VARCHAR2(50)
+ ADDRESS                                            VARCHAR2(100)
+
+
+SQL> create table CAR(
+  2  regno varchar(20),
+  3  model varchar(30),
+  4  year int,
+  5  primary key(regno));
+
+Table created.
+
+SQL> desc CAR
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REGNO                                     NOT NULL VARCHAR2(20)
+ MODEL                                              VARCHAR2(30)
+ YEAR                                               NUMBER(38)
+
+
+SQL> create table ACCIDENT(
+  2  report_number int,
+  3  accd_date date,
+  4  location varchar(50),
+  5  primary key(report_number));
+
+Table created.
+
+SQL> desc ACCIDENT
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ REPORT_NUMBER                             NOT NULL NUMBER(38)
+ ACCD_DATE                                          DATE
+ LOCATION                                           VARCHAR2(50)
+
+
+
+SQL> create table OWNS(
+  2  driverid varchar(30),
+  3  regno varchar(20),
+  4  foreign key (driverid) references PERSON,
+  5  foreign key (regno) references CAR);
+
+Table created.
+
+SQL> desc owns
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DRIVERID                                           VARCHAR2(30)
+ REGNO                                              VARCHAR2(20)
+
+
+
+
+create table PARTICIPATED(
+    driverid varchar(30),
+    regno varchar(20),
+    report_number int,
+    damage_amount int,
+    foreign key (driverid) references PERSON,
+    foreign key (regno) references CAR,
+    foreign key (report_number) references ACCIDENT);
+
+Table created.
+
+SQL> desc PARTICIPATED
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DRIVERID                                           VARCHAR2(30)
+ REGNO                                              VARCHAR2(20)
+ REPORT_NUMBER                                      NUMBER(38)
+ DAMAGE_AMOUNT                                      NUMBER(38)
+
+
+SQL> select table_name from user_tables;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+ACCIDENT
+CAR
+OWNS
+PARTICIPATED
+PERSON
+
+
+SQL> insert into ACCIDENT values (7 , '21-JAN-2025' , 'MIT');
+
+1 row created.
+
+SQL> insert into ACCIDENT values (12 , '20-JAN-2025' , 'kmc');
+
+1 row created.
+
+SQL> insert into ACCIDENT values (6 , '21-JAN-2024' , 'doc');
+
+1 row created.
+
+SQL> insert into ACCIDENT values (15 , '21-JAN-2023' , 'MITBLR');
+
+1 row created.
+
+SQL> insert into ACCIDENT values (1 , '21-JAN-2021' , 'BITS');
+
+1 row created.
+
+
+SQL> insert into PERSON values (2313 , 'Harsh' , 'Kerela');
+
+1 row created.
+
+SQL> insert into PERSON values (2310 , 'Suvan' , 'Manipur');
+
+1 row created.
+
+SQL> insert into PERSON values (2311 , 'Shreyas' , 'Agra');
+
+1 row created.
+
+SQL> insert into PERSON values (2312 , 'Ishan' , 'Mumbai');
+
+1 row created.
+
+
+SQL> insert into CAR values (230953364 , 'nano' , 2024);
+
+1 row created.
+
+SQL> insert into CAR values (230953380 , 'Zen' , 2023);
+
+1 row created.
+
+SQL> insert into CAR values (230953300 , 'Alto' , 2022);
+
+1 row created.
+
+SQL> insert into CAR values (230953399 , 'Omni' , 2021);
+
+1 row created.
+
+
+
+SQL> select * from PERSON;
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+2309
+Saurabh
+Manipal
+
+2313
+Harsh
+Kerela
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+
+2310
+Suvan
+Manipur
+
+2311
+Shreyas
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+Agra
+
+2312
+Ishan
+Mumbai
+
+
+
+
+SQL> select * from CAR;
+
+REGNO                MODEL                                YEAR
+-------------------- ------------------------------ ----------
+230953374            Creta                                2025
+230953364            nano                                 2024
+230953380            Zen                                  2023
+230953300            Alto                                 2022
+230953399            Omni                                 2021
+
+
+
+SQL> select * from ACCIDENT;
+
+REPORT_NUMBER ACCD_DATE LOCATION
+------------- --------- --------------------------------------------------
+            7 21-JAN-25 MIT
+           12 20-JAN-25 kmc
+            6 21-JAN-24 doc
+           15 21-JAN-23 MITBLR
+            1 21-JAN-21 BITS
+
+
+
+SQL> insert into OWNS values(2309 , 230953374);
+
+1 row created.
+
+SQL>  insert into OWNS values(2313 , 230953364);
+
+1 row created.
+
+SQL>  insert into OWNS values(2310 , 230953380);
+
+1 row created.
+
+SQL>  insert into OWNS values(2311 , 230953300);
+
+1 row created.
+
+SQL>  insert into OWNS values(2312 , 230953399);
+
+1 row created.
+
+SQL> select * from OWNS;
+
+DRIVERID                       REGNO
+------------------------------ --------------------
+2309                           230953374
+2313                           230953364
+2310                           230953380
+2311                           230953300
+2312                           230953399
+
+
+insert into PARTICIPATED values (2309 , 230953374 , 7,100000);
+insert into PARTICIPATED values (2313 , 230953364 , 12,65000);
+insert into PARTICIPATED values (2310 , 230953380 , 6,20000);
+insert into PARTICIPATED values (2311,230953300 ,15,50000);
+insert into PARTICIPATED values (2312,230953399,1 , 75000);
+
+SQL> select * from PARTICIPATED;
+
+DRIVERID                       REGNO                REPORT_NUMBER DAMAGE_AMOUNT
+------------------------------ -------------------- ------------- -------------
+2309                           230953374                        7        100000
+2313                           230953364                       12         65000
+2310                           230953380                        6         20000
+2312                           230953399                        1         75000
+2311                           230953300                       15         50000
+
+SQL> update PARTICIPATED
+  2  set damage_amount = 25000
+  3  where report_number = 12 ;
+
+1 row updated.
+
+SQL> select * from PARTICIPATED;
+
+DRIVERID                       REGNO                REPORT_NUMBER DAMAGE_AMOUNT
+------------------------------ -------------------- ------------- -------------
+2309                           230953374                        7        100000
+2313                           230953364                       12         25000
+2310                           230953380                        6         20000
+2312                           230953399                        1         75000
+2311                           230953300                       15         50000
+
+SQL> delete from PARTICIPATED where report_number=(select report_number from ACCIDENT where extract(year from accd_date)=2024);
+
+1 row deleted.
+
+SQL> select * from PARTICIPATED;
+
+DRIVERID                       REGNO                REPORT_NUMBER DAMAGE_AMOUNT
+------------------------------ -------------------- ------------- -------------
+2309                           230953374                        7        100000
+2313                           230953364                       12         25000
+2312                           230953399                        1         75000
+2311                           230953300                       15         50000
+
+
+SQL> delete from ACCIDENT where extract(year from accd_date)=2024;
+
+1 row deleted.
+
+SQL> select * from ACCIDENT;
+
+REPORT_NUMBER ACCD_DATE LOCATION
+------------- --------- --------------------------------------------------
+            7 21-JAN-25 MIT
+           12 20-JAN-25 kmc
+           15 21-JAN-23 MITBLR
+            1 21-JAN-21 BITS
+
+SQL> alter table PERSON add gender varchar(30);
+
+Table altered.
+
+SQL> desc PERSON;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DRIVERID                                  NOT NULL VARCHAR2(30)
+ NAME                                               VARCHAR2(50)
+ ADDRESS                                            VARCHAR2(100)
+ GENDER                                             VARCHAR2(30)
+
+
+SQL> alter table CAR drop column model;
+
+Table altered.
+
+SQL> select * from CAR;
+
+REGNO                      YEAR
+-------------------- ----------
+230953374                  2025
+230953364                  2024
+230953380                  2023
+230953300                  2022
+230953399                  2021
+
+
+SQL> alter table PARTICIPATED add constraint damagecheck check (damage_amount >=25000);
+
+Table altered.
+
+SQL> insert into PARTICIPATED values(2314 , 230953365 , 17 , 24000);
+insert into PARTICIPATED values(2314 , 230953365 , 17 , 24000)
+*
+ERROR at line 1:
+ORA-02290: check constraint (CCE230953374.DAMAGECHECK) violated
+SQL> commit;
+
+Commit complete.
