@@ -1,0 +1,173 @@
+SQL> insert into ACCIDENT values(28 , '28-JAN-2008' , 'NIH');
+
+1 row created.
+
+
+SQL> insert into PARTICIPATED values(2309 , 230953374 , 28 , 200000);
+
+1 row created.
+
+SQL> select * from PARTICIPATED ;
+
+DRIVERID                       REGNO                REPORT_NUMBER DAMAGE_AMOUNT
+------------------------------ -------------------- ------------- -------------
+2313                           230953364                       12         25000
+2312                           230953399                        1         75000
+2311                           230953300                       15         50000
+2309                           230953374                       28        200000
+
+
+SQL> select count(distinct driverid)
+  2  from PARTICIPATED natural join OWNS
+  3  where report_number in(select a.report_number
+  4  from ACCIDENT a
+  5  where extract(year from a.accd_date)=2008);
+
+COUNT(DISTINCTDRIVERID)
+-----------------------
+                      1
+
+SQL> select count(report_number) , model from PARTICIPATED natural join CAR group by model;
+
+COUNT(REPORT_NUMBER) MODEL
+-------------------- -------
+                   2 Creta
+                   1 Omni
+                   1 nano
+
+SQL> select name as OWNER_NAME,count(distinct driverid),sum(damage_amount) as total_Damage from PERSON natural join PARTICIPATED group by(name) order by(TOTAL_DAMAGE) DESC;
+
+OWNER_NAME                                         COUNT(DISTINCTDRIVERID)
+-------------------------------------------------- -----------------------
+TOTAL_DAMAGE
+------------
+Saurabh                                                                  1
+      200000
+
+Ishan                                                                    1
+       75000
+
+Shreyas                                                                  1
+       50000
+
+
+OWNER_NAME                                         COUNT(DISTINCTDRIVERID)
+-------------------------------------------------- -----------------------
+TOTAL_DAMAGE
+------------
+Harsh                                                                    1
+       25000
+
+
+
+
+SQL> select * FROM ACCIDENT;
+
+REPORT_NUMBER ACCD_DATE LOCATION
+------------- --------- --------------------------------------------------
+            7 21-JAN-25 MIT
+           12 20-JAN-25 kmc
+           15 21-JAN-23 MITBLR
+            1 21-JAN-21 BITS
+           28 28-JAN-08 NIH
+           32 21-JAN-09 BITS
+           31 21-JAN-08 BITS
+
+SQL> select * FROM PARTICIPATED;
+
+DRIVERID                       REGNO                REPORT_NUMBER DAMAGE_AMOUNT
+------------------------------ -------------------- ------------- -------------
+2313                           230953364                       12         25000
+2312                           230953399                        1         75000
+2311                           230953300                       15         50000
+2309                           230953374                       28        200000
+2309                           230953374                       32         75000
+2309                           230953374                       31         75000
+
+
+ select name,extract(year from accd_date) as year,count(driverid) as total_accidents from PERSON natural join PARTICIPATED join ACCIDENT using (report_number) group by(name,extract(year from accd_date)) having count(driverid)>=2;
+
+NAME                                                     YEAR TOTAL_ACCIDENTS
+-------------------------------------------------- ---------- ---------------
+Saurabh                                                  2008               2
+
+
+SQL> select * from PERSON;
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+GENDER
+------------------------------
+2309
+Saurabh
+Manipal
+
+
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+GENDER
+------------------------------
+2313
+Harsh
+Kerela
+
+
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+GENDER
+------------------------------
+2310
+Suvan
+Manipur
+
+
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+GENDER
+------------------------------
+2311
+Shreyas
+Agra
+
+
+
+DRIVERID
+------------------------------
+NAME
+--------------------------------------------------
+ADDRESS
+--------------------------------------------------------------------------------
+GENDER
+------------------------------
+2312
+Ishan
+Mumbai
+
+SQL> select name
+  2  from PERSON
+  3  where driverid not in(select driverid
+  4  from PARTICIPATED );
+
+NAME
+--------------------------------------------------
+Suvan
+
